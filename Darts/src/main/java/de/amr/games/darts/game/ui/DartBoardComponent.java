@@ -123,8 +123,9 @@ public class DartBoardComponent extends JComponent {
 			return "Single Bull";
 		case BULLS_EYE:
 			return "Bulls-Eye";
+		default:
+			return "";
 		}
-		return "";
 	}
 
 	public void setDiameter(int diameter) {
@@ -197,11 +198,13 @@ public class DartBoardComponent extends JComponent {
 			int targetWidth = diameter / 5;
 			int targetHeight = diameter / 5;
 			g.fillOval(currentTarget.x - 5, currentTarget.y - 5, 10, 10);
-			g.drawImage(dartImage, currentTarget.x, currentTarget.y - targetHeight, targetWidth, targetHeight, null);
+			g.drawImage(dartImage, currentTarget.x, currentTarget.y - targetHeight, targetWidth,
+					targetHeight, null);
 		}
 		// draw current value as text
 		if (currentRing != null) {
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
+					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			g.setColor(Color.GRAY);
 			g.setFont(textFont);
 			String text = getValueAsText(currentRing, currentSegment);

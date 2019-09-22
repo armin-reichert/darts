@@ -24,7 +24,8 @@ public class DartBoardField {
 		if (number >= 1 && number <= 20 || number == 25 && type != DartBoardFieldType.TRIPLE) {
 			this.number = number;
 			this.type = type;
-		} else {
+		}
+		else {
 			throw new IllegalArgumentException();
 		}
 	}
@@ -45,8 +46,9 @@ public class DartBoardField {
 			return 2 * number;
 		case TRIPLE:
 			return 3 * number;
+		default:
+			throw new IllegalStateException();
 		}
-		throw new IllegalStateException();
 	}
 
 	@Override
@@ -58,8 +60,9 @@ public class DartBoardField {
 			return number == 25 ? "Bull" : "D" + number;
 		case TRIPLE:
 			return "T" + number;
+		default:
+			return super.toString();
 		}
-		return super.toString();
 	}
 
 }
