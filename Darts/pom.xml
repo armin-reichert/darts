@@ -7,7 +7,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>de.amr.games.darts</groupId>
 	<artifactId>Darts</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>1.0</version>
 	<name>Darts Counter</name>
 	<build>
 		<plugins>
