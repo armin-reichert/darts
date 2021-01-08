@@ -11,7 +11,6 @@ import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.Image;
 import java.awt.Point;
 import java.awt.RenderingHints;
 import java.awt.event.ActionEvent;
@@ -20,7 +19,7 @@ import java.awt.event.ComponentEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
-import java.io.IOException;
+import java.awt.image.BufferedImage;
 import java.io.InputStream;
 
 import javax.imageio.ImageIO;
@@ -34,30 +33,16 @@ public class DartBoardComponent extends JComponent {
 
 	public static final String PROPERTY_POINTS = "points";
 
-	private static Image boardImage;
-	private static Image dartImage;
-
-	static {
-		InputStream dartImageSource = DartBoardComponent.class.getResourceAsStream("/dart.png");
-		if (dartImageSource == null) {
-			throw new RuntimeException("Dart image not found");
-		}
-		try {
-			dartImage = ImageIO.read(dartImageSource);
-		} catch (IOException e) {
-			throw new RuntimeException("Dart image could not be loaded");
-		}
-		InputStream boardImageSource = DartBoardComponent.class.getResourceAsStream("/dartboard.png");
-		if (boardImageSource == null) {
-			throw new RuntimeException("Board image not found");
-		}
-		try {
-			boardImage = ImageIO.read(boardImageSource);
-		} catch (IOException e) {
-			throw new RuntimeException("Board image could not be loaded");
+	private BufferedImage loadImage(String path) {
+		try (InputStream is = getClass().getResourceAsStream(path)) {
+			return ImageIO.read(is);
+		} catch (Exception x) {
+			throw new RuntimeException("Dart image could not be loaded", x);
 		}
 	}
 
+	private final BufferedImage boardImage;
+	private final BufferedImage dartImage;
 	private Point center;
 	private double scaling;
 	private int diameter;
@@ -73,6 +58,8 @@ public class DartBoardComponent extends JComponent {
 
 	public DartBoardComponent(int diameter) {
 		setDiameter(diameter);
+		dartImage = loadImage("/dart.png");
+		boardImage = loadImage("/dartboard.png");
 		registerEventHandlers();
 	}
 
@@ -198,13 +185,11 @@ public class DartBoardComponent extends JComponent {
 			int targetWidth = diameter / 5;
 			int targetHeight = diameter / 5;
 			g.fillOval(currentTarget.x - 5, currentTarget.y - 5, 10, 10);
-			g.drawImage(dartImage, currentTarget.x, currentTarget.y - targetHeight, targetWidth,
-					targetHeight, null);
+			g.drawImage(dartImage, currentTarget.x, currentTarget.y - targetHeight, targetWidth, targetHeight, null);
 		}
 		// draw current value as text
 		if (currentRing != null) {
-			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING,
-					RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+			g.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
 			g.setColor(Color.GRAY);
 			g.setFont(textFont);
 			String text = getValueAsText(currentRing, currentSegment);
